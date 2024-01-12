@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "ParentWidget.h"
 #include "InGameMenu.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PP_API UInGameMenu : public UUserWidget
+class PP_API UInGameMenu : public UParentWidget
 {
 	GENERATED_BODY()
 	

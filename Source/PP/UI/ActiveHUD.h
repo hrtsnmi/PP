@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Blueprint/UserWidget.h"
+#include "ParentWidget.h"
 #include "ActiveHUD.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PP_API UActiveHUD : public UUserWidget
+class PP_API UActiveHUD : public UParentWidget
 {
 	GENERATED_BODY()
 	
