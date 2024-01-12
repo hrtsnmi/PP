@@ -14,4 +14,13 @@ class PP_API APPGameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	void StartGame() const;
+	void EndGame();
+
+protected:
+	virtual void PostLogin(APlayerController* NewPlayer) override;
+	virtual void Logout(AController* Existing) override;
+
+	int ConnectedePlayers{};
 };

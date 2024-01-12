@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+
 #include "PPPlayerController.generated.h"
 
 /**
@@ -20,15 +21,14 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaSeconds) override;
 	virtual void SetupInputComponent() override;
-	virtual void OnPosses(APawn* InPawn) override;
+	virtual void OnPossess(APawn* InPawn) override;
 
-	UFUNTION(Client, Reliable, BlueprintCallable, Category = "PC|UI")
+	UFUNCTION(NetMulticast, Reliable, BlueprintCallable, Category = "PC|UI")
 		void SetupGameUI();
 
-	UFUNTION()
-		void ToggleInGameMenu();
+	UFUNCTION() void ToggleInGameMenu();
 
-	UPROPERTY(, Category = "PC|Config")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PC|Config")
 		UPongGameInstance* PongGameInstance;
 
 };
