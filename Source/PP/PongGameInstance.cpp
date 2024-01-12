@@ -35,6 +35,16 @@ void UPongGameInstance::OnCreateSessionComplete(const FName SessionName, bool bS
 			return;
 	}
 
+	if (!ensure(MainMenu))
+	{
+		return;
+	}
+	MainMenu->Teardown();
+	
+		UE_LOG(LogUnrealPong, Warning, TEXT("Could not create session"))
+			return;
+	
+
 	UE_LOG(LogUnrealPong, Log, TEXT("Hosting %s"), *ServerData.Name);
 
 	StartGame();
@@ -82,7 +92,7 @@ void UPongGameInstance::OnFindSessionsComplete(bool bSuccess)
 			ServerNames.Add(Data);
 		}
 
-		//MainMenu->SetServerList(ServerNames);
+		MainMenu->SetServerList(ServerNames);
 	}
 }
 
@@ -192,7 +202,7 @@ void UPongGameInstance::Join(const int& Index, const FPPServerDataStruct& InServ
 	{
 		return;
 	}
-	//MainMenu->Teardown();
+	MainMenu->Teardown();
 
 	ServerData.Name = InServerData.Name;
 	ServerData.PlayersAmount = InServerData.PlayersAmount;
@@ -203,11 +213,11 @@ void UPongGameInstance::Join(const int& Index, const FPPServerDataStruct& InServ
 
 void UPongGameInstance::StartGame()
 {
-	/*if (!ensure(MainMenu))
+	if (!ensure(MainMenu))
 	{
 		return;
 	}
-	MainMenu->Teardown();*/
+	MainMenu->Teardown();
 
 	UEngine* Engine = GetEngine();
 	if (!ensure(Engine))
@@ -223,7 +233,7 @@ void UPongGameInstance::StartGame()
 		return;
 	}
 
-	// ShowLoadingScreen();
+	//ShowLoadingScreen();
 
 	World->ServerTravel("/Game/Levels/Main?listen");
 }
@@ -261,18 +271,18 @@ void UPongGameInstance::LoadMainMenuWidget()
 		return;
 	}
 
-	/*if (!MainMenu)
+	if (!MainMenu)
 	{
-		MainMenu = CreateWidget<UMainMenu>();
-	}*/
+		MainMenu = CreateWidget<UMainMenu>(this, MainMenuClass);
+	}
 
-	/*if (!ensure(MainMenu))
+	if (!ensure(MainMenu))
 	{
 		return;
-	}*/
+	}
 
-	/*MainMenu->Setup();
-	MainMenu->SetMenuInterface(this);*/
+	MainMenu->Setup();
+	MainMenu->SetMenuInterface(this);
 }
 
 void UPongGameInstance::LoadActiveHUDWidget()
@@ -284,7 +294,7 @@ void UPongGameInstance::LoadActiveHUDWidget()
 
 	if (!GameHUD)
 	{
-		//GameHUD = CreateWidget<UMainMenu>();
+		GameHUD = CreateWidget<UActiveHUD>(this, GameHUDClass);
 	}
 
 	if (!ensure(GameHUD))
@@ -292,8 +302,8 @@ void UPongGameInstance::LoadActiveHUDWidget()
 		return;
 	}
 
-	/*GameHUD->Setup();
-	GameHUD->SetMenuInterface(this);*/
+	GameHUD->Setup();
+	GameHUD->SetMenuInterface(this);
 }
 
 void UPongGameInstance::LoadInGameMenuWidget()
@@ -305,13 +315,13 @@ void UPongGameInstance::LoadInGameMenuWidget()
 
 	if (InGameMenu && InGameMenu->IsInViewport())
 	{
-		//InGameMenu->Teardown();
+		InGameMenu->Teardown();
 		return;
 	}
 	
 	if (!InGameMenu)
 	{
-		//InGameMenu = CreateWidget<UMainMenu>();
+		InGameMenu = CreateWidget<UInGameMenu>(this, InGameMenuClass);
 	}
 
 	if (!ensure(InGameMenu))
@@ -319,6 +329,6 @@ void UPongGameInstance::LoadInGameMenuWidget()
 		return;
 	}
 
-	/*InGameMenu->Setup();
-	InGameMenu->SetMenuInterface(this);*/
+	InGameMenu->Setup();
+	InGameMenu->SetMenuInterface(this);
 }

@@ -24,6 +24,7 @@ public:
 	void SelectserverRowIndex(const uint32 Index);
 
 protected:
+	explicit UMainMenu(FObjectInitializer const& ObjectInitializer);
 	virtual bool Initialize() override;
 
 private:

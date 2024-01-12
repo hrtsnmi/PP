@@ -33,11 +33,11 @@ protected:
 		FPPServerDataStruct ServerData;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instance|Config")
-		class UMainMenu* MainMenu;
+		 UMainMenu* MainMenu;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instance|Config")
-		class UActiveHUD* GameHUD;
+		 UActiveHUD* GameHUD;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Instance|Config")
-		class UInGameMenu* InGameMenu;
+		 UInGameMenu* InGameMenu;
 
 	/// Blueprint References, to be set in Editor on defaults
 

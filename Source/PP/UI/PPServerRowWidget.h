@@ -46,7 +46,7 @@ private:
 		UTextBlock* ConnectionFraction;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget, AllowPrivateAccess = true))
-		UButton* RowButton;
+		UButton* m_RowButton;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = true))
 		UMainMenu* Parent;

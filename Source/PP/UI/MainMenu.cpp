@@ -10,6 +10,11 @@
 
 DEFINE_LOG_CATEGORY(LogUnrealPongUI);
 
+UMainMenu::UMainMenu(FObjectInitializer const& ObjectInitializer)
+{
+
+}
+
 void UMainMenu::SetActiveWidget(const int& Index)
 {
 	m_Switcher->SetActiveWidgetIndex(Index);
@@ -17,28 +22,29 @@ void UMainMenu::SetActiveWidget(const int& Index)
 
 void UMainMenu::SetServerList(TArray<FPPServerDataStruct> ServerNames)
 {
-	const UWorld* World = GetWorld();
+	/*const UWorld* World = GetWorld();
 	if (!ensure(World))
 	{
 		return;
-	}
+	}*/
 
 	m_ServerList->ClearChildren();
 
 	uint32 i = 0;
 	for (FPPServerDataStruct const& ServerData : ServerNames)
 	{
-		/*UPPServerRowWidget* ServerRow = CreateWidget<UPPServerRowWidget>(World, ServerRowWidgetClass);
+		//UPPServerRowWidget* ServerRow = CreateWidget<UPPServerRowWidget>(this, ServerRowWidgetClass);
+		UPPServerRowWidget* ServerRow = CreateWidget<UPPServerRowWidget>(GetWorld(), ServerRowWidgetClass);
 		if (!ensure(ServerRow))
 		{
 			return;
 		}
 
 		ServerRow->SetServerData(ServerData);
-		ServerRow->Setup(this, i);*/
+		ServerRow->Setup(this, i);
 		++i;
 
-		//m_ServerList->AddChild(ServerRow);
+		m_ServerList->AddChild(ServerRow);
 	}
 }
 
@@ -107,7 +113,7 @@ void UMainMenu::UpdateServerRowChildren()
 		UPPServerRowWidget* Row = Cast<UPPServerRowWidget>(m_ServerList->GetChildAt(i));
 		if (Row)
 		{
-			//Row->SetrowIsSelected(SelectserverRowIndex.IsSet() && SelectserverRowIndex.GetValue()==i);
+			Row->SetRowIsSelected(SelectedServerRowIndex.IsSet() && SelectedServerRowIndex.GetValue() == i);
 		}
 	}
 }
@@ -127,7 +133,7 @@ void UMainMenu::JoinServer()
 		if (const UPPServerRowWidget* Row = Cast<UPPServerRowWidget>(m_ServerList->GetChildAt(SelectedServerRowIndex.GetValue())))
 		{
 			m_Switcher->SetActiveWidget(m_MainMenu);
-			//MenuInterface->Join(SelectedServerRowIndex.GetValue(), Row->GetServerData());
+			MenuInterface->Join(SelectedServerRowIndex.GetValue(), Row->GetServerData());
 		}
 	}
 	else

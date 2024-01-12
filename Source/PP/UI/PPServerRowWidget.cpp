@@ -11,8 +11,12 @@ void UPPServerRowWidget::Setup(UMainMenu* InParent, uint32 const InIndex)
 {
 	Parent = InParent;
 	Index = InIndex;
-	if (!ensure(RowButton)) return;
-	RowButton->OnClicked.AddDynamic(this, &UPPServerRowWidget::OnRowClicked);
+	if (!ensure(m_RowButton))
+	{
+		return;
+	}
+
+	m_RowButton->OnClicked.AddDynamic(this, &UPPServerRowWidget::OnRowClicked);
 }
 
 void UPPServerRowWidget::SetServerData(FPPServerDataStruct const& InServerData)
