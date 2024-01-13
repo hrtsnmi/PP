@@ -6,6 +6,7 @@
 #include "ParentWidget.h"
 #include "InGameMenu.generated.h"
 
+class UButton;
 /**
  * 
  */
@@ -14,4 +15,18 @@ class PP_API UInGameMenu : public UParentWidget
 {
 	GENERATED_BODY()
 	
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget, AllowPrivateAcces = true))
+		UButton* m_ResumeButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget, AllowPrivateAcces = true))
+		UButton* m_LeaveSessionButton;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (BindWidget, AllowPrivateAcces = true))
+		UButton* m_QuitButton;
+
+protected:
+	virtual bool Initialize() override;
+
+	UFUNCTION() void ResumePressed();
+	UFUNCTION() void LeaveGamePressed();
+	UFUNCTION() void QuitGamePressed();
 };
