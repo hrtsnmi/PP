@@ -41,8 +41,11 @@ void UPongGameInstance::OnCreateSessionComplete(const FName SessionName, bool bS
 	}
 	MainMenu->Teardown();
 	
-		UE_LOG(LogUnrealPong, Warning, TEXT("Could not create session"))
-			return;
+	UEngine* Engine = GetEngine();
+	if (!ensure(Engine))
+	{
+		return;
+	}
 	
 
 	UE_LOG(LogUnrealPong, Log, TEXT("Hosting %s"), *ServerData.Name);

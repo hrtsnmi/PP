@@ -12,6 +12,9 @@ class PP_API ABallActor : public AActor
 	GENERATED_BODY()
 
 protected:
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void Move(float DeltaTime);
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BoxComp;
 
@@ -26,6 +29,8 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
 		uint8 bGameOver : 1;
+
+	FVector CurrentVelocity{};
 
 	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UProjectileMovementComponent* BallMovementComponent;*/
@@ -52,7 +57,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	void Start();
-	void Restart();
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void Restart();
+
 	void GameOver();
 
 };

@@ -21,7 +21,11 @@ private:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshComp;
 
+	UPROPERTY(Replicated)
 	FVector CurrentVelocity{};
+
+	UFUNCTION(Server, Reliable, BlueprintCallable)
+		void ChangeLocation(float Value);
 
 public:
 	// Sets default values for this pawn's properties
@@ -30,6 +34,8 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 public:	
 	// Called every frame

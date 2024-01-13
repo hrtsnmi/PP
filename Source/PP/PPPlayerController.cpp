@@ -26,11 +26,7 @@ void APPPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction("InGameMenu", IE_Pressed, this, &APPPlayerController::ToggleInGameMenu);
-
-	if (GetPawn()->GetClass()->ImplementsInterface(UPlatformMovementInterface::StaticClass()))
-	{
-		InputComponent->BindAxis("MovePlatform", this, &APPPlayerController::MoveInput);
-	}
+	InputComponent->BindAxis("MovePlatform", this, &APPPlayerController::MoveInput);
 }
 
 void APPPlayerController::OnPossess(APawn* InPawn)
@@ -49,7 +45,7 @@ void APPPlayerController::SetupGameUI_Implementation()
 {
 	if (PongGameInstance && PongGameInstance->IsValidLowLevel())
 	{
-		//PongGameInstance->LoadGameHUDWidget();
+		PongGameInstance->LoadActiveHUDWidget();
 	}
 }
 
@@ -57,11 +53,14 @@ void APPPlayerController::ToggleInGameMenu()
 {
 	if(PongGameInstance && PongGameInstance->IsValidLowLevel())
 	{
-		//PongGameInstance->LoadGameHUDWidget();
+		PongGameInstance->LoadInGameMenuWidget();
 	}
 }
 
 void APPPlayerController::MoveInput(float Value)
 {
-	IPlatformMovementInterface::Execute_Move(GetPawn(), Value);
+	if (GetPawn() && GetPawn()->GetClass()->ImplementsInterface(UPlatformMovementInterface::StaticClass()))
+	{
+		IPlatformMovementInterface::Execute_Move(GetPawn(), Value);
+	}
 }

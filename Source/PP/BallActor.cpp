@@ -6,6 +6,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "PlatformPawn.h"
 #include "WallActor.h"
+#include "GateActor.h"
 
 // Sets default values
 ABallActor::ABallActor()
@@ -53,26 +54,27 @@ void ABallActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	Move(DeltaTime);
 }
 
 void ABallActor::Start()
 {
 	bGameOver = false;
 
-	SetActorLocation(FVector::ZeroVector);
-	StaticMeshComp->SetPhysicsLinearVelocity(
-		FVector(FMath::RandRange(-300.f, 300.f),
-			(FMath::RandBool() ? 1.f : -1.f) * 200.f,
-			0.f));
+	Restart();
 }
 
-void ABallActor::Restart()
+void ABallActor::Restart_Implementation()
 {
 	SetActorLocation(FVector::ZeroVector);
-	StaticMeshComp->SetPhysicsLinearVelocity(
-		FVector(FMath::RandRange(-300.f, 300.f),
-			(FMath::RandBool() ? 1.f : -1.f) * 200.f,
-			0.f));
+	/*StaticMeshComp->SetPhysicsLinearVelocity(
+		FVector(FMath::RandRange(-1000.f, 1000.f),
+			(FMath::RandBool() ? 1.f : -1.f) * 500.f,
+			0.f));*/
+
+	CurrentVelocity = FVector(FMath::RandRange(-500.f, 500.f),
+		(FMath::RandBool() ? 1.f : -1.f) * 500.f,
+		0.f);
 }
 
 void ABallActor::GameOver()
@@ -90,34 +92,57 @@ void ABallActor::GameOver()
 //
 //}
 
+void ABallActor::Move_Implementation(float DeltaTime)
+{
+	if (!CurrentVelocity.IsZero())
+	{
+		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
+		SetActorLocation(NewLocation);
+	}
+}
+
 void ABallActor::OnPlatformHit(AActor* OverlappedActor, AActor* OtherActor)
 {
 	APlatformPawn* PlatformPawn = Cast<APlatformPawn>(OtherActor);
 	if (PlatformPawn && PlatformPawn->IsValidLowLevel())
 	{
-		const FVector BallLinearVelocity = StaticMeshComp->GetPhysicsLinearVelocity();
+		/*const FVector BallLinearVelocity = StaticMeshComp->GetPhysicsLinearVelocity();
 		const FVector PlatformLinearVelocity = PlatformPawn->GetStaticMesh()->GetPhysicsLinearVelocity();
 		const FVector NewBallLinearVelocity =
-			FVector(PlatformLinearVelocity.X + FMath::RandRange(-100.f, 100.f),
+			FVector(PlatformLinearVelocity.X + FMath::RandRange(-1000.f, 1000.f),
 				BallLinearVelocity.Y * -1.f, BallLinearVelocity.Z);
 
-		StaticMeshComp->SetPhysicsLinearVelocity(NewBallLinearVelocity);
+		StaticMeshComp->SetPhysicsLinearVelocity(NewBallLinearVelocity);*/
+
+		const FVector BallLinearVelocity = CurrentVelocity;
+		const FVector PlatformLinearVelocity = PlatformPawn->GetStaticMesh()->GetPhysicsLinearVelocity();
+		const FVector NewBallLinearVelocity =
+			FVector(PlatformLinearVelocity.X + FMath::RandRange(-1000.f, 1000.f),
+				BallLinearVelocity.Y * -1.f, BallLinearVelocity.Z);
+
+
+		CurrentVelocity = NewBallLinearVelocity;
 	}
 
 	AWallActor* Wall = Cast<AWallActor>(OtherActor);
 	if (Wall && Wall->IsValidLowLevel())
 	{
-		if (Wall->ActorHasTag("")) //Red Gate
-		{
+		/*const FVector BallLinearVelocity = StaticMeshComp->GetPhysicsLinearVelocity();
+		const FVector NewBallLinearVelocity =
+			FVector(BallLinearVelocity.X * -1.f, BallLinearVelocity.Y, BallLinearVelocity.Z);
 
-		}
-		else if (Wall->ActorHasTag("")) ////Blue Gate
-		{
+		StaticMeshComp->SetPhysicsLinearVelocity(NewBallLinearVelocity);*/
 
-		}
-		else //Wall
-		{
+		const FVector BallLinearVelocity = CurrentVelocity;
+		const FVector NewBallLinearVelocity =
+			FVector(BallLinearVelocity.X * -1.f, BallLinearVelocity.Y, BallLinearVelocity.Z);
 
-		}
+		CurrentVelocity = NewBallLinearVelocity;
+	}
+
+	AGateActor* GateActor = Cast<AGateActor>(OtherActor);
+	if (GateActor && GateActor->IsValidLowLevel())
+	{
+		Restart();
 	}
 }

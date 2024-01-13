@@ -4,6 +4,31 @@
 #include "PlatformPawn.h"
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
+#include "Net/UnrealNetwork.h"
+
+void APlatformPawn::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APlatformPawn, CurrentVelocity);
+}
+
+void APlatformPawn::ChangeLocation_Implementation(float Value)
+{
+	CurrentVelocity.X = FMath::Clamp(Value, -1.0f, 1.0f) * 500.0f;
+
+	if (CurrentVelocity.X < 0.0f && GetActorLocation().X < -1300.f)
+	{
+		CurrentVelocity.X = 0.f;
+		return;
+	}
+
+	if (CurrentVelocity.X > 0.0f && GetActorLocation().X > 1300.f)
+	{
+		CurrentVelocity.X = 0.f;
+		return;
+	}
+}
 
 // Sets default values
 APlatformPawn::APlatformPawn()
@@ -46,18 +71,6 @@ void APlatformPawn::Tick(float DeltaTime)
 
 void APlatformPawn::Move_Implementation(float Value)
 {
-	CurrentVelocity.X = FMath::Clamp(Value, -1.0f, 1.0f) * 100.0f;
-
-	if (CurrentVelocity.X < 0.0f && GetActorLocation().X < -320.f)
-	{
-		CurrentVelocity.X = 0.f;
-		return;
-	}
-
-	if (CurrentVelocity.X > 0.0f && GetActorLocation().X > 220.f)
-	{
-		CurrentVelocity.X = 0.f;
-		return;
-	}
+	ChangeLocation(Value);
 }
 

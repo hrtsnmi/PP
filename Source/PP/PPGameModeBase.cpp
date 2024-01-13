@@ -61,6 +61,6 @@ void APPGameModeBase::Logout(AController* Existing)
 		return;
 	}
 
-	World->ServerTravel("/Game/Maps/Main?listen");
+	World->ServerTravel("/Game/Levels/Main?listen");
 	Super::Logout(Existing);
 }
