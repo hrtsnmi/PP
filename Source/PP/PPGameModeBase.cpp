@@ -12,7 +12,7 @@ void APPGameModeBase::StartGame() const
 	UGameplayStatics::GetAllActorsOfClass(this, ABallActor::StaticClass(), Balls);
 	if (Balls.Num() > 0 && IsValid(Balls[0]))
 	{
-		//Cast<ABallActor>(Balls[0])->Start();
+		Cast<ABallActor>(Balls[0])->Start();
 	}
 }
 
@@ -22,7 +22,7 @@ void APPGameModeBase::EndGame()
 	UGameplayStatics::GetAllActorsOfClass(this, ABallActor::StaticClass(), Balls);
 	if (Balls.Num() > 0 && IsValid(Balls[0]))
 	{
-		//Cast<ABallActor>(Balls[0])->GameOver();
+		Cast<ABallActor>(Balls[0])->GameOver();
 	}
 }
 

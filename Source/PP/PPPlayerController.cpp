@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "PongGameInstance.h"
 #include "Camera/CameraActor.h"
+#include "Interfaces/PlatformMovementInterface.h"
 
 void APPPlayerController::BeginPlay()
 {
@@ -25,7 +26,11 @@ void APPPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 
 	InputComponent->BindAction("InGameMenu", IE_Pressed, this, &APPPlayerController::ToggleInGameMenu);
-	//InputComponent->BindAxis("", );
+
+	if (GetPawn()->GetClass()->ImplementsInterface(UPlatformMovementInterface::StaticClass()))
+	{
+		InputComponent->BindAxis("MovePlatform", this, &APPPlayerController::MoveInput);
+	}
 }
 
 void APPPlayerController::OnPossess(APawn* InPawn)
@@ -54,4 +59,9 @@ void APPPlayerController::ToggleInGameMenu()
 	{
 		//PongGameInstance->LoadGameHUDWidget();
 	}
+}
+
+void APPPlayerController::MoveInput(float Value)
+{
+	IPlatformMovementInterface::Execute_Move(GetPawn(), Value);
 }

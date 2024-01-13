@@ -9,13 +9,18 @@
 AWallActor::AWallActor()
 {
 	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
-	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Comp"));;
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Comp"));
-
-	RootComponent = BoxComp;
 	StaticMeshComp->SetupAttachment(RootComponent);
+	
+	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Comp"));
+	BoxComp->SetupAttachment(StaticMeshComp);
+	BoxComp->SetBoxExtent(FVector(100.0f, 2500.0f, 100.0f));
+	BoxComp->SetCollisionProfileName(FName("PhysicsActor"));
+	
+	
+
 }
 
 // Called when the game starts or when spawned
@@ -23,12 +28,5 @@ void AWallActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
-}
-
-// Called every frame
-void AWallActor::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 

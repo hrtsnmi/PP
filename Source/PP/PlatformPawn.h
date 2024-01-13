@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Pawn.h"
+#include "Interfaces/PlatformMovementInterface.h"
 #include "PlatformPawn.generated.h"
 
 
 
 UCLASS()
-class PP_API APlatformPawn : public APawn
+class PP_API APlatformPawn :
+	public APawn, public IPlatformMovementInterface
 {
 	GENERATED_BODY()
 private:
@@ -18,6 +20,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshComp;
+
+	FVector CurrentVelocity{};
 
 public:
 	// Sets default values for this pawn's properties
@@ -31,7 +35,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	void Move_Implementation(float Value);
 
+	UStaticMeshComponent* GetStaticMesh() { return StaticMeshComp; }
 };

@@ -10,24 +10,34 @@ UCLASS()
 class PP_API ABallActor : public AActor
 {
 	GENERATED_BODY()
-private:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+
+protected:
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BoxComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
-		class UProjectileMovementComponent* BallMovementComponent;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+		class UStaticMesh* BallMesh;
+
+	UFUNCTION()
+		void OnPlatformHit(AActor* OverlappedActor, AActor* OtherActor);
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Config")
+		uint8 bGameOver : 1;
+
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
+		class UProjectileMovementComponent* BallMovementComponent;*/
 
 private:
-	UFUNCTION()
+	/*UFUNCTION()
 		void BeginOverlap(UPrimitiveComponent* OverlappedComponent,
 			AActor* OtherActor,
 			UPrimitiveComponent* OtherComp,
 			int32 OtherBodyIndex,
 			bool bFromSweep,
-			const FHitResult& SweepResult);
+			const FHitResult& SweepResult);*/
 
 public:	
 	// Sets default values for this actor's properties
@@ -40,5 +50,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void Start();
+	void Restart();
+	void GameOver();
 
 };

@@ -31,4 +31,5 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "PC|Config")
 		UPongGameInstance* PongGameInstance;
 
+	UFUNCTION(BlueprintCallable, Category = "Player|Movement") void MoveInput(float Value);
 };

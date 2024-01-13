@@ -4,30 +4,31 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "WallActor.generated.h"
-
-class UStaticMeshComponent;
+#include "GateActor.generated.h"
 
 UCLASS()
-class PP_API AWallActor : public AActor
+class PP_API AGateActor : public AActor
 {
 	GENERATED_BODY()
+	
+public:	
+	// Sets default values for this actor's properties
+	AGateActor();
 
-private:
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UBoxComponent* BoxComp;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components", meta = (AllowPrivateAccess = "true"))
 		class UStaticMeshComponent* StaticMeshComp;
 
-public:	
-	// Sets default values for this actor's properties
-	AWallActor();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Config", meta = (AllowPrivateAccess = "true"))
+		int PlayerNumber{};
 
 public:	
 
+	UFUNCTION() void Score(AActor* OverlappedActor, AActor* OtherActor);
 };

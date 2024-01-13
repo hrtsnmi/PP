@@ -13,9 +13,15 @@ APlatformPawn::APlatformPawn()
 
 	BoxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Comp"));;
 	StaticMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Static Mesh Comp"));
+	StaticMeshComp->SetCollisionProfileName("PhysicsActor");
 
 	RootComponent = BoxComp;
 	StaticMeshComp->SetupAttachment(RootComponent);
+	BoxComp->SetCollisionProfileName(FName("PhysicsActor"));
+	BoxComp->SetBoxExtent(FVector(175.0f, 50.0f, 50.0f));
+
+	bReplicates = true;
+
 }
 
 // Called when the game starts or when spawned
@@ -23,6 +29,7 @@ void APlatformPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	SetReplicateMovement(true);
 }
 
 // Called every frame
@@ -30,12 +37,27 @@ void APlatformPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (!CurrentVelocity.IsZero())
+	{
+		FVector NewLocation = GetActorLocation() + (CurrentVelocity * DeltaTime);
+		SetActorLocation(NewLocation);
+	}
 }
 
-// Called to bind functionality to input
-void APlatformPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void APlatformPawn::Move_Implementation(float Value)
 {
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	CurrentVelocity.X = FMath::Clamp(Value, -1.0f, 1.0f) * 100.0f;
 
+	if (CurrentVelocity.X < 0.0f && GetActorLocation().X < -320.f)
+	{
+		CurrentVelocity.X = 0.f;
+		return;
+	}
+
+	if (CurrentVelocity.X > 0.0f && GetActorLocation().X > 220.f)
+	{
+		CurrentVelocity.X = 0.f;
+		return;
+	}
 }
 
